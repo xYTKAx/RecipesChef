@@ -5737,40 +5737,58 @@ const SUPABASE_KEY = "sb_publishable_ZJQj5K-afy6B41qVmFw3UA_NAZzo9-D";
 </script>
 
 
+
 <div class="mealprep-box">
 <h3>🍱 Заготовка / Приготовление</h3>
-<div class="mealprep-row"><span>📅 Дата приготовления</span><b id="cookedDateView">Не указана</b></div>
-<div class="mealprep-row"><span>🍽 Приготовлено порций</span><b id="preparedPortionsView">0</b></div>
-<div class="mealprep-row"><span>📦 Осталось порций</span><b id="remainingPortionsView">0</b></div>
-<button class="mealprep-btn" onclick="addMealPrepPortion()">+ Добавить порцию</button>
-<button class="mealprep-btn" onclick="eatMealPrepPortion()">− Съел порцию</button>
+
+<div class="mealprep-row">
+<span>🍽 Приготовлено порций</span>
+<input id="preparedInput" type="number" min="0" value="0" style="width:80px">
+</div>
+
+<div class="mealprep-row">
+<span>📦 Осталось порций</span>
+<b id="remainingPortionsView">0</b>
+</div>
+
+<div class="mealprep-row">
+<span>📅 Дата приготовления</span>
+<button class="mealprep-btn" onclick="setMealPrepDate()">Добавить дату</button>
+</div>
+
+<button class="mealprep-btn" onclick="saveMealPrep()">Сохранить</button>
 </div>
 
 <script>
 let mealPrep = JSON.parse(localStorage.getItem('mealPrep_v150')) || {
- cookedDate: '',
- preparedPortions: 0,
- remainingPortions: 0
+ cookedDate:'',
+ preparedPortions:0,
+ remainingPortions:0
 };
+
 function renderMealPrep(){
- const d=document.getElementById('cookedDateView');
- if(d) d.textContent=mealPrep.cookedDate || 'Не указана';
- const p=document.getElementById('preparedPortionsView');
- const r=document.getElementById('remainingPortionsView');
- if(p) p.textContent=mealPrep.preparedPortions;
- if(r) r.textContent=mealPrep.remainingPortions;
+ const input=document.getElementById('preparedInput');
+ const remain=document.getElementById('remainingPortionsView');
+ if(input) input.value=mealPrep.preparedPortions;
+ if(remain) remain.textContent=mealPrep.remainingPortions;
 }
-function addMealPrepPortion(){
- mealPrep.preparedPortions++;
- mealPrep.remainingPortions++;
+
+function saveMealPrep(){
+ const input=document.getElementById('preparedInput');
+ mealPrep.preparedPortions=Number(input.value)||0;
+ mealPrep.remainingPortions=mealPrep.preparedPortions;
  localStorage.setItem('mealPrep_v150',JSON.stringify(mealPrep));
  renderMealPrep();
 }
-function eatMealPrepPortion(){
- if(mealPrep.remainingPortions>0) mealPrep.remainingPortions--;
- localStorage.setItem('mealPrep_v150',JSON.stringify(mealPrep));
- renderMealPrep();
+
+function setMealPrepDate(){
+ const date=prompt('Введите дату приготовления (например 14.09.2026)');
+ if(date){
+  mealPrep.cookedDate=date;
+  localStorage.setItem('mealPrep_v150',JSON.stringify(mealPrep));
+ }
 }
+
 renderMealPrep();
 </script>
 </body>
