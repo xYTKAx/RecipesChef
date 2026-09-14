@@ -13,7 +13,7 @@
     >
 
     <title>Рецепты шефа Николая Заготовченко</title>
-    <meta name="app-version" content="1.5.0">
+    <meta name="app-version" content="1.3.0">
 
 
 
@@ -1200,26 +1200,6 @@
         .version-history-item { grid-template-columns:64px minmax(0,1fr); }
     }
 
-
-/* Meal Prep v1.5.0 */
-.mealprep-box {
-    margin: 16px 0;
-    padding: 16px;
-    border-radius: 16px;
-    background: #f0fff4;
-    border: 1px solid #c6f6d5;
-}
-.mealprep-row {
-    display:flex;
-    justify-content:space-between;
-    margin:8px 0;
-}
-.mealprep-btn {
-    border:0;
-    border-radius:12px;
-    padding:10px 14px;
-    cursor:pointer;
-}
 </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -2783,10 +2763,7 @@ const SUPABASE_KEY = "sb_publishable_ZJQj5K-afy6B41qVmFw3UA_NAZzo9-D";
             fat: 3.9,
             carbs: 15,
             recipe: "",
-            image: "",
-            cookedDate: "",
-            preparedPortions: 1,
-            remainingPortions: 1
+            image: ""
         }
     ]);
 
@@ -2806,17 +2783,6 @@ const SUPABASE_KEY = "sb_publishable_ZJQj5K-afy6B41qVmFw3UA_NAZzo9-D";
     ========================= */
 
     dishes.forEach(dish => {
-
-        // v1.5.0 Meal Prep fields
-        if (dish.cookedDate === undefined) {
-            dish.cookedDate = "";
-        }
-        if (dish.preparedPortions === undefined) {
-            dish.preparedPortions = 1;
-        }
-        if (dish.remainingPortions === undefined) {
-            dish.remainingPortions = dish.preparedPortions;
-        }
 
         if (
             dish.recipe === undefined
@@ -5736,61 +5702,6 @@ const SUPABASE_KEY = "sb_publishable_ZJQj5K-afy6B41qVmFw3UA_NAZzo9-D";
 
 </script>
 
-
-
-<div class="mealprep-box">
-<h3>🍱 Заготовка / Приготовление</h3>
-
-<div class="mealprep-row">
-<span>🍽 Приготовлено порций</span>
-<input id="preparedInput" type="number" min="0" value="0" style="width:80px">
-</div>
-
-<div class="mealprep-row">
-<span>📦 Осталось порций</span>
-<b id="remainingPortionsView">0</b>
-</div>
-
-<div class="mealprep-row">
-<span>📅 Дата приготовления</span>
-<button class="mealprep-btn" onclick="setMealPrepDate()">Добавить дату</button>
-</div>
-
-<button class="mealprep-btn" onclick="saveMealPrep()">Сохранить</button>
-</div>
-
-<script>
-let mealPrep = JSON.parse(localStorage.getItem('mealPrep_v150')) || {
- cookedDate:'',
- preparedPortions:0,
- remainingPortions:0
-};
-
-function renderMealPrep(){
- const input=document.getElementById('preparedInput');
- const remain=document.getElementById('remainingPortionsView');
- if(input) input.value=mealPrep.preparedPortions;
- if(remain) remain.textContent=mealPrep.remainingPortions;
-}
-
-function saveMealPrep(){
- const input=document.getElementById('preparedInput');
- mealPrep.preparedPortions=Number(input.value)||0;
- mealPrep.remainingPortions=mealPrep.preparedPortions;
- localStorage.setItem('mealPrep_v150',JSON.stringify(mealPrep));
- renderMealPrep();
-}
-
-function setMealPrepDate(){
- const date=prompt('Введите дату приготовления (например 14.09.2026)');
- if(date){
-  mealPrep.cookedDate=date;
-  localStorage.setItem('mealPrep_v150',JSON.stringify(mealPrep));
- }
-}
-
-renderMealPrep();
-</script>
 </body>
 
 </html>
