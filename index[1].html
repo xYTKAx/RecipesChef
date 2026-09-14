@@ -1200,6 +1200,26 @@
         .version-history-item { grid-template-columns:64px minmax(0,1fr); }
     }
 
+
+/* Meal Prep v1.5.0 */
+.mealprep-box {
+    margin: 16px 0;
+    padding: 16px;
+    border-radius: 16px;
+    background: #f0fff4;
+    border: 1px solid #c6f6d5;
+}
+.mealprep-row {
+    display:flex;
+    justify-content:space-between;
+    margin:8px 0;
+}
+.mealprep-btn {
+    border:0;
+    border-radius:12px;
+    padding:10px 14px;
+    cursor:pointer;
+}
 </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -5716,6 +5736,43 @@ const SUPABASE_KEY = "sb_publishable_ZJQj5K-afy6B41qVmFw3UA_NAZzo9-D";
 
 </script>
 
+
+<div class="mealprep-box">
+<h3>🍱 Заготовка / Приготовление</h3>
+<div class="mealprep-row"><span>📅 Дата приготовления</span><b id="cookedDateView">Не указана</b></div>
+<div class="mealprep-row"><span>🍽 Приготовлено порций</span><b id="preparedPortionsView">0</b></div>
+<div class="mealprep-row"><span>📦 Осталось порций</span><b id="remainingPortionsView">0</b></div>
+<button class="mealprep-btn" onclick="addMealPrepPortion()">+ Добавить порцию</button>
+<button class="mealprep-btn" onclick="eatMealPrepPortion()">− Съел порцию</button>
+</div>
+
+<script>
+let mealPrep = JSON.parse(localStorage.getItem('mealPrep_v150')) || {
+ cookedDate: '',
+ preparedPortions: 0,
+ remainingPortions: 0
+};
+function renderMealPrep(){
+ const d=document.getElementById('cookedDateView');
+ if(d) d.textContent=mealPrep.cookedDate || 'Не указана';
+ const p=document.getElementById('preparedPortionsView');
+ const r=document.getElementById('remainingPortionsView');
+ if(p) p.textContent=mealPrep.preparedPortions;
+ if(r) r.textContent=mealPrep.remainingPortions;
+}
+function addMealPrepPortion(){
+ mealPrep.preparedPortions++;
+ mealPrep.remainingPortions++;
+ localStorage.setItem('mealPrep_v150',JSON.stringify(mealPrep));
+ renderMealPrep();
+}
+function eatMealPrepPortion(){
+ if(mealPrep.remainingPortions>0) mealPrep.remainingPortions--;
+ localStorage.setItem('mealPrep_v150',JSON.stringify(mealPrep));
+ renderMealPrep();
+}
+renderMealPrep();
+</script>
 </body>
 
 </html>
